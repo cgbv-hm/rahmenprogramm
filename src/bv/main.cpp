@@ -44,6 +44,8 @@ int main()
 
     glfwMakeContextCurrent(window);
 
+	glfwSwapInterval(0);
+
     renderer = std::make_unique<cgbv::BVRenderer>(window);
     if(!renderer->setup())
     {

@@ -184,7 +184,7 @@ namespace cgbv
         TwInit(TW_OPENGL_CORE, nullptr);
         TwWindowSize(1280, 720);
         TwBar *tweakbar = TwNewBar("TweakBar");
-        TwDefine(" TweakBar size='400 600'");
+        TwDefine(" TweakBar size='300 600'");
 		TwDefine(" GLOBAL fontsize=3 ");
 
         std::vector<TwEnumVal> imgTypeData;

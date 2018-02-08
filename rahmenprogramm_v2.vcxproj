@@ -69,7 +69,7 @@
     <IncludePath>$(SolutionDir)/src;$(SolutionDir)/dependencies/include/AntTweakBar;$(SolutionDir)/dependencies/include/;$(SolutionDir)/dependencies/include/FreeImage/;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)/dependencies/x86/anttweakbar/;$(SolutionDir)/dependencies/x86/glfw-vc2015/;$(SolutionDir)/dependencies/x86/freeimage/;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)/bin/</OutDir>
-    <IntDir>$(Configuration)\bv</IntDir>
+    <IntDir>$(Configuration)/bv/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>true</LinkIncremental>
