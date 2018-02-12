@@ -32,6 +32,9 @@ namespace cgbv
 		void moveTo(glm::vec3 newPosition);
 		void moveTo(float x, float y, float z);
 
+		void moveForward(float delta);
+		void moveRight(float delta);
+
 		void setTarget(glm::vec3 newTarget);
 		void setTarget(float x, float y, float z);
 

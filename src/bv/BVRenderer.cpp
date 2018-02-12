@@ -243,7 +243,7 @@ namespace cgbv
         {
             glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &uiParams.passOps[pass]);
 
-            glActiveTexture(0);
+			glActiveTexture(GL_TEXTURE0);
             glBindSampler(0, sampler);
             glBindTexture(GL_TEXTURE_RECTANGLE, tex);
             glUniform1i(locs.tex, 0);

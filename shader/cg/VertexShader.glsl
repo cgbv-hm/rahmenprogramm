@@ -48,7 +48,6 @@ uniform Light light;
 subroutine uniform VertexProgram vertexprogram;
 
 layout(location = 0) out VertexOutput Output;
-layout(location = 3) out VertexOutput OutputSmooth;
 // =============================================================================================================
 
 
@@ -78,9 +77,5 @@ subroutine (VertexProgram) void verts_and_normals()
 
     Output.lightDir = light.lightPos - mvPos;
     Output.viewDir = -mvPos;
-
-    OutputSmooth.lightDir = Output.lightDir;
-    OutputSmooth.viewDir = Output.viewDir;
-    OutputSmooth.normal = Output.normal;
 }
 // =============================================================================================================

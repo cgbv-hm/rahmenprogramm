@@ -41,7 +41,27 @@ namespace cgbv
 
     void CGRenderer::input(int key, int scancode, int action, int modifiers)
     {
-
+		switch (key)
+		{
+		case GLFW_KEY_W:
+			std::cout << "W" << std::endl;
+			camera.moveForward(.1f);
+			break;
+		case GLFW_KEY_S:
+			std::cout << "S" << std::endl;
+			camera.moveForward(-.1f);
+			break;
+		case GLFW_KEY_A:
+			std::cout << "A" << std::endl;
+			camera.moveRight(.1f);
+			break;
+		case GLFW_KEY_D:
+			std::cout << "D" << std::endl;
+			camera.moveRight(-.1f);
+			break;
+		default:
+			break;
+		}
     }
 
 
@@ -53,6 +73,7 @@ namespace cgbv
         if(!gladLoadGL())
             return false;
 
+
         // GL States
         glClearColor(0.4f, 0.4f, 0.4f, 1.f);
 
@@ -62,6 +83,8 @@ namespace cgbv
 
 
         projection = glm::perspective(float(M_PI) / 5.f, float(window_width) / float(window_height), .1f, 200.f);
+		camera.setTarget(glm::vec3(0.f, 0.f, 0.f));
+		camera.moveTo(0.f, -.5f, 5.f);
 
 
         // Shader
@@ -143,11 +166,12 @@ namespace cgbv
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
+        //camera.setTarget(glm::vec3(0.f, 0.f, 0.f));
+        //camera.moveTo(0.f, -.5f, 5.f);
         glm::mat4 view = camera.getViewMatrix();
 
 
-        model = glm::mat4(1.f) * glm::translate(glm::mat4(1.f), glm::vec3(0.f, -.5f, -5.f)) * glm::mat4_cast(parameter.globalRotation);
+        model = glm::mat4_cast(parameter.globalRotation);
 
 
         shader->use();

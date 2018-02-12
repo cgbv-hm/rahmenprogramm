@@ -89,6 +89,27 @@ void cgbv::Camera::moveTo(float x, float y, float z)
 }
 
 
+void cgbv::Camera::moveForward(float delta)
+{
+	glm::vec3 forward = target - position;
+
+	position += forward * delta;
+	target += forward * delta;
+}
+
+
+void cgbv::Camera::moveRight(float delta)
+{
+	adjustUp();
+
+	glm::vec3 forward = target - position;
+	glm::vec3 right = glm::cross(forward, up);
+
+	position += right * -delta;
+	target += right * -delta;
+}
+
+
 void cgbv::Camera::setTarget(glm::vec3 newTarget)
 {
 	target = newTarget;
@@ -130,10 +151,6 @@ glm::mat4 cgbv::Camera::getViewMatrix()
 
 	glm::mat4 m;
 
-	/*m.A11(s.X());			m.A12(s.Y());			m.A13(s.Z());			m.A14(0.f);
-	m.A21(u.X());			m.A22(u.Y());			m.A23(u.Z());			m.A24(0.f);
-	m.A31(-delta.X());		m.A32(-delta.Y());		m.A33(-delta.Z());		m.A34(0.f);
-	m.A41(0.f);				m.A42(0.f);				m.A43(0.f);				m.A44(1.f);*/
 	m[0][0] = s.x;				m[1][0] = s.y;				m[2][0] = s.z;				m[3][0] = 0.f;
 	m[0][1] = u.x;				m[1][1] = u.y;				m[2][1] = u.z;				m[3][1] = 0.f;
 	m[0][2] = -delta.x;			m[1][2] = -delta.y;			m[2][2] = -delta.z;			m[3][2] = 0.f;
