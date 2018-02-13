@@ -41,27 +41,26 @@ namespace cgbv
 
     void CGRenderer::input(int key, int scancode, int action, int modifiers)
     {
-		switch (key)
-		{
-		case GLFW_KEY_W:
-			std::cout << "W" << std::endl;
-			camera.moveForward(.1f);
-			break;
-		case GLFW_KEY_S:
-			std::cout << "S" << std::endl;
-			camera.moveForward(-.1f);
-			break;
-		case GLFW_KEY_A:
-			std::cout << "A" << std::endl;
-			camera.moveRight(.1f);
-			break;
-		case GLFW_KEY_D:
-			std::cout << "D" << std::endl;
-			camera.moveRight(-.1f);
-			break;
-		default:
-			break;
-		}
+        if(action == GLFW_PRESS)
+        {
+            switch (key)
+            {
+                case GLFW_KEY_W:
+                    camera.moveForward(.1f);
+                    break;
+                case GLFW_KEY_S:
+                    camera.moveForward(-.1f);
+                    break;
+                case GLFW_KEY_A:
+                    camera.moveRight(.1f);
+                    break;
+                case GLFW_KEY_D:
+                    camera.moveRight(-.1f);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
 
