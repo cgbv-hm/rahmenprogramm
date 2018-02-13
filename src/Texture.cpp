@@ -122,9 +122,14 @@ namespace cgbv
 
 
 
-		void Texture2DStorage::Store(std::string path, char *data, int width, int height, int imgDepth)
+		void Texture2DStorage::Store(std::string path, GLubyte *data, int width, int height, int imgDepth)
 		{
+			auto datatype = FreeImage_GetFIFFromFilename(path.c_str());
+			FIBITMAP *image = FreeImage_ConvertFromRawBits(data, width, height, 3 * width, 24, 0x0000FF, 0xFF0000, 0x00FF00, false);
+			if (!FreeImage_Save(datatype, image, path.c_str()))
+				std::cout << "Writing Image " << path << " failed" << std::endl;
 
+			FreeImage_Unload(image);
 		}
 
 

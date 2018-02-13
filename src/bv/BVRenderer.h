@@ -8,6 +8,7 @@
 #include <glm/ext.hpp>
 #include <Texture.h>
 #include <FrameCounter.h>
+#include <bitset>
 
 
 namespace cgbv
@@ -62,6 +63,8 @@ namespace cgbv
 
         std::unique_ptr<statistics::FrameCounter> framecounter;
 
+		std::bitset<1> screenshot;
+
 	public:
 		BVRenderer(GLFWwindow *window);
 		~BVRenderer(void);
@@ -72,5 +75,6 @@ namespace cgbv
 		virtual bool setup();
 		virtual void render();
 		virtual void update();
+		void capture();
 	};
 }

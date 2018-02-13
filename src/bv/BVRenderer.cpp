@@ -10,6 +10,13 @@
 
 namespace cgbv
 {
+	void TW_CALL handleScreenshot(void *data)
+	{
+		BVRenderer *renderer = reinterpret_cast<BVRenderer*>(data);
+		renderer->capture();
+	}
+
+
     BVRenderer::BVRenderer(GLFWwindow *window) : Renderer(window)
     {
 
@@ -20,6 +27,12 @@ namespace cgbv
     {
 
     }
+
+
+	void BVRenderer::capture()
+	{
+		screenshot.set();
+	}
 
 
     void BVRenderer::destroy()
@@ -201,6 +214,8 @@ namespace cgbv
         TwType imgType = TwDefineEnum("ImageType", imgTypeData.data(), imgTypeData.size());
 		TwAddVarRW(tweakbar, "Image", imgType, &uiParams.activeTexture, nullptr);
 
+		TwAddButton(tweakbar, "Take Screenshot", handleScreenshot, this, nullptr);
+
 		TwAddVarRW(tweakbar, "Passes", TW_TYPE_INT32, &uiParams.numberPasses, "min='1' max='4' group='Render Stages'");
 
 		const TwEnumVal bvoperations[] = { { 0, "Passthrough" },{ 1, "Bewegter Mittelwert" },{ 2, "Helligkeit/Kontrast" },{ 3, "Sharpen" } ,{ 4, "Dilatation" },{ 5, "Erosion" },{ 6, "Gauss 3x3" },{ 7, "Gauss 5x5" },{ 8, "Gauss 7x7" } ,{ 9, "Gauss 7x7 Vertikal" } ,{ 10, "Gauss 7x7 Horizontal" },{ 11, "Sobel" } ,{ 12, "Laplace" }, {13, "Median"} };
@@ -290,6 +305,17 @@ namespace cgbv
             default:
                 break;
         }
+
+
+
+		if (screenshot[0])
+		{
+			std::cout << "Take Screenshot" << std::endl;
+			std::unique_ptr<GLubyte[]> pixel = std::make_unique<GLubyte[]>(window_width * window_height * 3);
+			glReadPixels(0, 0, window_width, window_height, GL_BGR, GL_UNSIGNED_BYTE, pixel.get());
+			textures::Texture2DStorage::Store("../textures/Screenshot.png", pixel.get(), window_width, window_height, 0);
+			screenshot.reset();
+		}
 
 
 
