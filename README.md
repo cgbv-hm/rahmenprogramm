@@ -1,1 +1,1 @@
-rahmenprogramm_v2
+Rahmenprogramm für die Lehrveranstaltung Computergrafik und Bildverarbeitung
