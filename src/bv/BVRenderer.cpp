@@ -59,6 +59,9 @@ namespace cgbv
 
     void BVRenderer::input(int key, int scancode, int action, int modifiers)
     {
+        TwEventCharGLFW(key, action);
+        TwEventKeyGLFW(key, action);
+
         switch(key)
         {
             case GLFW_KEY_UP:
