@@ -42,7 +42,7 @@ namespace cgbv
     void CGRenderer::input(int key, int scancode, int action, int modifiers)
     {
         TwEventCharGLFW(key, action);
-        TwEventKeyGLFW(key, action)
+        TwEventKeyGLFW(key, action);
 
         if(action == GLFW_PRESS)
         {
