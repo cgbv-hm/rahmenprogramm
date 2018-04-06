@@ -10,7 +10,6 @@
 #include <FrameCounter.h>
 #include <bitset>
 
-
 namespace cgbv
 {
     struct ShaderLocations

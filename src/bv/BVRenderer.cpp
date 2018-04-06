@@ -7,7 +7,6 @@
 #include <AntTweakBar.h>
 
 
-
 namespace cgbv
 {
 	void TW_CALL handleScreenshot(void *data)
