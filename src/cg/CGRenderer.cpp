@@ -109,6 +109,7 @@ namespace cgbv
 
 
         // Geometrie
+		/*
         std::vector<float> data = 
 		{
 			-1.f, -1.f, 0.f,
@@ -121,10 +122,28 @@ namespace cgbv
 			-1.f, 1.f, 0.f,
 			0.f, 1.f,
 			1.f, -1.f, 0.f,
-			1.f * .04f, 0.f,
+			1.f * .04f, 0.f, 
 			1.f, 1.f, 0.f,
 			1.f * .04f, 1.f
 		};
+		*/
+		std::vector<float> data =
+		{
+			-1.f, -1.f, 0.f,
+			0.f, 0.f,
+			1.f, -1.f, 0.f,
+			1.f, 0.f,
+			-1.f, 1.f, 0.f,
+			0.f, 1.f,
+
+			-1.f, 1.f, 0.f,
+			0.f, 1.f,
+			1.f, -1.f, 0.f,
+			1.f, 0.f,
+			1.f, 1.f, 0.f,
+			1.f, 1.f
+		};
+		
 		cone.vertsToDraw = 6;
 
         glGenVertexArrays(1, &cone.vao);
@@ -150,7 +169,8 @@ namespace cgbv
 		glSamplerParameterf(sampler, GL_TEXTURE_MAX_ANISOTROPY, 16.f);
 
 		texture = std::make_unique<cgbv::textures::Texture2D>();
-		texture->Generate("../textures/cg/magic_003.png", true);
+		//texture->Generate("../textures/cg/magic_003.png", true);
+		texture->Generate("../textures/cg/Block5.BMP", true);
 
 
 
@@ -211,7 +231,8 @@ namespace cgbv
         TwDraw();
     }
 
-
+	void CGRenderer::update() {}
+	/*
     void CGRenderer::update()
     {
 		auto now = std::chrono::high_resolution_clock::now();
@@ -225,4 +246,5 @@ namespace cgbv
 
 		last = now;
     }
+	*/
 }

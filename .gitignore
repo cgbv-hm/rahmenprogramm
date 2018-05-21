@@ -38,9 +38,7 @@ gl_core_4_4.*
 
 CMakeLists.txt
 
-textures/*
-!textures/bv/*
-!textures/cg/*
+
 \.vs/
 Debug
 Release
