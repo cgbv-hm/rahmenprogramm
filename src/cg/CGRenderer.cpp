@@ -23,6 +23,7 @@ namespace cgbv
     {
         glDeleteVertexArrays(1, &cone.vao);
         glDeleteBuffers(1, &cone.vbo);
+		glDeleteSamplers(1, &sampler);
     }
 
 
@@ -81,6 +82,8 @@ namespace cgbv
 
         glEnable(GL_ALPHA_TEST);
         glEnable(GL_DEPTH_TEST);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
 
@@ -92,50 +95,56 @@ namespace cgbv
         // Shader
         shader = std::make_unique<cgbv::shader::GLSLShaderprogram>("../shader/cg/VertexShader.glsl", "../shader/cg/FragmentShader.glsl");
         locs.vertex = shader->getAttribLocation("vertex");
-        locs.normal = shader->getAttribLocation("normal");
+        locs.uv = shader->getAttribLocation("uvs");
         locs.modelViewProjection = shader->getUniformLocation("matrices.mvp");
         locs.normalmatrix = shader->getUniformLocation("matrices.normal");
         locs.modelview = shader->getUniformLocation("matrices.mv");
         locs.lightPos = shader->getUniformLocation("light.lightPos");
-        locs.subFragment = shader->getSubroutineIndex(GL_FRAGMENT_SHADER, "toon");
+		locs.texture = shader->getUniformLocation("textures.tex");
+		locs.animationUVs = shader->getUniformLocation("animStage");
+        locs.subFragment = shader->getSubroutineIndex(GL_FRAGMENT_SHADER, "textured");
         locs.subVertex = shader->getSubroutineIndex(GL_VERTEX_SHADER, "verts_and_normals");
 
 
 
 
         // Geometrie
-        std::vector<glm::vec3> basevertices;
-        std::vector<glm::vec3> basenormals;
+		/*
+        std::vector<float> data = 
+		{
+			-1.f, -1.f, 0.f,
+			0.f, 0.f,
+			1.f, -1.f, 0.f,
+			1.f * .04f, 0.f,
+			-1.f, 1.f, 0.f,
+			0.f, 1.f,
 
-        float step = 2.f * float(M_PI) / 32.f;
-        for(float f = 0; f <= 2.f * float(M_PI) + step; f += step)
-        {
-            float x = std::sin(f);
-            float z = std::cos(f);
-            basevertices.push_back(glm::vec3(x, 0.f, z));
-            basenormals.push_back(glm::vec3(x, std::sin(float(M_PI) / 12.6), z));
-        }
+			-1.f, 1.f, 0.f,
+			0.f, 1.f,
+			1.f, -1.f, 0.f,
+			1.f * .04f, 0.f, 
+			1.f, 1.f, 0.f,
+			1.f * .04f, 1.f
+		};
+		*/
+		std::vector<float> data =
+		{
+			-1.f, -1.f, 0.f,
+			0.f, 0.f,
+			1.f, -1.f, 0.f,
+			1.f, 0.f,
+			-1.f, 1.f, 0.f,
+			0.f, 1.f,
 
-        std::vector<float> data;
-        glm::vec3 top(0.f, 2.f, 0.f);
-        for(unsigned int i = 0; i < basevertices.size(); ++i)
-        {
-            int next = (i + 1 == basevertices.size()) ? 0 : i + 1;
-
-            glm::vec3 topnormal = glm::normalize(basenormals[i] + basenormals[next]);
-
-            data.insert(std::end(data), glm::value_ptr(basevertices[i]), glm::value_ptr(basevertices[i]) + sizeof(glm::vec3) / sizeof(float));
-            data.insert(std::end(data), glm::value_ptr(basenormals[i]), glm::value_ptr(basenormals[i]) + sizeof(glm::vec3) / sizeof(float));
-            cone.vertsToDraw++;
-
-            data.insert(std::end(data), glm::value_ptr(top), glm::value_ptr(top) + sizeof(glm::vec3) / sizeof(float));
-            data.insert(std::end(data), glm::value_ptr(topnormal), glm::value_ptr(topnormal) + sizeof(glm::vec3) / sizeof(float));
-            cone.vertsToDraw++;
-
-            data.insert(std::end(data), glm::value_ptr(basevertices[next]), glm::value_ptr(basevertices[next]) + sizeof(glm::vec3) / sizeof(float));
-            data.insert(std::end(data), glm::value_ptr(basenormals[next]), glm::value_ptr(basenormals[next]) + sizeof(glm::vec3) / sizeof(float));
-            cone.vertsToDraw++;
-        }
+			-1.f, 1.f, 0.f,
+			0.f, 1.f,
+			1.f, -1.f, 0.f,
+			1.f, 0.f,
+			1.f, 1.f, 0.f,
+			1.f, 1.f
+		};
+		
+		cone.vertsToDraw = 6;
 
         glGenVertexArrays(1, &cone.vao);
         glBindVertexArray(cone.vao);
@@ -145,9 +154,23 @@ namespace cgbv
         glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(locs.vertex);
-        glVertexAttribPointer(locs.vertex, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), nullptr);
-        glEnableVertexAttribArray(locs.normal);
-        glVertexAttribPointer(locs.normal, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (const void*) size_t(3 * sizeof(float)));
+        glVertexAttribPointer(locs.vertex, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), nullptr);
+        glEnableVertexAttribArray(locs.uv);
+        glVertexAttribPointer(locs.uv, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (const void*) size_t(3 * sizeof(float)));
+
+
+
+		// Texturen
+		glGenSamplers(1, &sampler);
+		glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glSamplerParameteri(sampler, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glSamplerParameteri(sampler, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glSamplerParameterf(sampler, GL_TEXTURE_MAX_ANISOTROPY, 16.f);
+
+		texture = std::make_unique<cgbv::textures::Texture2D>();
+		//texture->Generate("../textures/cg/magic_003.png", true);
+		texture->Generate("../textures/cg/Block5.BMP", true);
 
 
 
@@ -161,6 +184,8 @@ namespace cgbv
         TwAddVarRW(tweakbar, "Lichtrichtung", TW_TYPE_DIR3F, &parameter.lightPos, "group=Light axisx=-x axisy=-y axisz=-z opened=true");
 
         return true;
+
+		last = std::chrono::high_resolution_clock::now();
     }
 
 
@@ -185,20 +210,41 @@ namespace cgbv
 
         glUniform3fv(locs.lightPos, 1, glm::value_ptr(parameter.lightPos));
 
+		glActiveTexture(GL_TEXTURE0);
+		glBindSampler(0, sampler);
+		glBindTexture(GL_TEXTURE_2D, texture->getTextureID());
+		glUniform1i(locs.texture, 0);
+
 
         glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &locs.subVertex);
         glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &locs.subFragment);
 
+		glUniform1f(locs.animationUVs, animStage);
+
         glBindVertexArray(cone.vao);
         glDrawArrays(GL_TRIANGLES, 0, cone.vertsToDraw);
+
+		glBindSampler(0, 0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 
 
         TwDraw();
     }
 
-
+	void CGRenderer::update() {}
+	/*
     void CGRenderer::update()
     {
+		auto now = std::chrono::high_resolution_clock::now();
 
+		std::chrono::duration<float, std::milli> delta = now - last;
+
+		animStage += (delta.count() * 0.02f);
+
+		if (animStage >= 25.f)
+			animStage = 0.f;
+
+		last = now;
     }
+	*/
 }
