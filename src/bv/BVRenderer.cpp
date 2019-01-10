@@ -85,6 +85,22 @@ namespace cgbv
         }
     }
 
+	void BVRenderer::cursorPosition(double x, double y)
+	{
+	}
+
+	void BVRenderer::scrollInput(double x, double y)
+	{
+	}
+
+	void BVRenderer::charInput(unsigned int c)
+	{
+	}
+
+	void BVRenderer::mouseButton(int button, int action, int mods)
+	{
+	}
+
 
     bool BVRenderer::setup()
     {

@@ -12,6 +12,8 @@ void input(GLFWwindow *window, int key, int scancode, int action, int modifiers)
 void errorHandler(int error, const char* description);
 void cursorPos(GLFWwindow *window, double x, double y);
 void mouseButton(GLFWwindow *window, int button, int action, int mods);
+void scrollInput(GLFWwindow *window, double x, double y);
+void charInput(GLFWwindow *window, unsigned int c);
 
 void update();
 void render();
@@ -59,6 +61,8 @@ int main()
 
 	glfwSetCursorPosCallback(window, cursorPos);
 	glfwSetMouseButtonCallback(window, mouseButton);
+	glfwSetScrollCallback(window, scrollInput);
+	glfwSetCharCallback(window, charInput);
 
 
 
@@ -126,11 +130,23 @@ void update()
 
 void cursorPos(GLFWwindow *window, double x, double y)
 {
-	TwEventMousePosGLFW(static_cast<int>(x), static_cast<int>(y));
+	renderer->cursorPosition(x, y);
 }
 
 
 void mouseButton(GLFWwindow *window, int button, int action, int mods)
 {
-	TwEventMouseButtonGLFW(button, action);
+	renderer->mouseButton(button, action, mods);
+}
+
+
+void scrollInput(GLFWwindow *window, double x, double y)
+{
+	renderer->scrollInput(x, y);
+}
+
+
+void charInput(GLFWwindow *window, unsigned int c)
+{
+	renderer->charInput(c);
 }

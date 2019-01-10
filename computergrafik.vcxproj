@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -129,6 +129,10 @@ xcopy "$(SolutionDir)dependencies\x86\freeimage\FreeImage.dll" "$(SolutionDir)bi
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="dependencies\imgui\imconfig.h" />
+    <ClInclude Include="dependencies\imgui\imgui.h" />
+    <ClInclude Include="dependencies\imgui\imgui_impl_glfw_gl3.h" />
+    <ClInclude Include="dependencies\imgui\imgui_internal.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\cg\CGRenderer.h" />
     <ClInclude Include="src\FrameCounter.h" />
@@ -137,8 +141,13 @@ xcopy "$(SolutionDir)dependencies\x86\freeimage\FreeImage.dll" "$(SolutionDir)bi
     <ClInclude Include="src\khr\khrplatform.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\UserInterface.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="dependencies\imgui\imgui.cpp" />
+    <ClCompile Include="dependencies\imgui\imgui_demo.cpp" />
+    <ClCompile Include="dependencies\imgui\imgui_draw.cpp" />
+    <ClCompile Include="dependencies\imgui\imgui_impl_glfw_gl3.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\cg\CGRenderer.cpp" />
     <ClCompile Include="src\cg\main.cpp" />
@@ -147,6 +156,7 @@ xcopy "$(SolutionDir)dependencies\x86\freeimage\FreeImage.dll" "$(SolutionDir)bi
     <ClCompile Include="src\GLSLShader.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\UserInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\cg\FragmentShader.glsl" />

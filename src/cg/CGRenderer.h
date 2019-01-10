@@ -61,6 +61,10 @@ namespace cgbv
 		virtual void destroy();
 		virtual void resize(int width, int height);
 		virtual void input(int key, int scancode, int action, int modifiers);
+		virtual void cursorPosition(double x, double y);
+		virtual void scrollInput(double x, double y);
+		virtual void charInput(unsigned int c);
+		virtual void mouseButton(int button, int action, int mods);
 		virtual bool setup();
 		virtual void render();
 		virtual void update();
